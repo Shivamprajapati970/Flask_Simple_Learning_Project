@@ -5,9 +5,10 @@ import pymysql
 from flask import redirect, url_for
 import json
 
+
 # Use PyMySQL as MySQLdb
 pymysql.install_as_MySQLdb()
-
+ 
 
 
 with open('config.json','r') as c:
@@ -32,10 +33,36 @@ class Contacts(db.Model):
     Message = db.Column(db.String(300), nullable=False)
     Date = db.Column(db.DateTime, nullable=True)  # Changed to DateTime
     #Phone = db.Column(db.String(15), nullable=False)  # Added phone column
+class Posts(db.Model):
+    sno = db.Column(db.Integer,primary_key=True)
+    title= db.Column(db.String(250), nullable=False)
+    slug =db.Column(db.String(50),nullable=False)
+    content= db.Column(db.String(300),nullable=False)
+    img_post= db.Column(db.String(50),nullable=True)
+    date= db.Column(db.String(50),nullable=True)
+
+#this is additional for check database is connect or not
+from sqlalchemy import text
+
+@app.before_request
+def test_connection():
+    try:
+        db.session.execute(text('SELECT 1'))
+        print("Database connection successful.")
+    except Exception as e:
+        print(f"Database connection failed: {e}")
+
+# Define a custom filter to truncate text to a number of words
+@app.template_filter('truncate_words')
+def truncate_words(text, num_words):
+    words = text.split()
+    return ' '.join(words[:num_words])
+
 
 @app.route("/")
 def index():
-    return render_template("index.html",params=params)
+    posts=Posts.query.filter_by().all()
+    return render_template("index.html",params=params,posts=posts)
 
 @app.route('/about')
 def about():
@@ -65,8 +92,18 @@ def contact():
 def single_post():
     return render_template("single-post.html",params=params)
 
+
+@app.route("/post/<string:post_slug>", methods=['GET'])
+def post(post_slug):
+    post_data=Posts.query.filter_by(slug=post_slug).first()
+    print(post_data)
+    return render_template("post.html",params=params, post_data=post_data)
+
+
 @app.route('/starter-page')
 def starter():
     return render_template("starter-page.html",params=params)
 
 app.run(debug=True)
+
+

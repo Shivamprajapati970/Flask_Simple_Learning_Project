@@ -137,43 +137,18 @@
                 <div class="col-lg-4">
 
                   <div class="trending">
-                    <h3>Trending</h3>
+                    <h3>Trending Post</h3>
                     <ul class="trending-post">
+                      {% for p in posts %}
                       <li>
-                        <a href="blog-details.html">
-                          <span class="number">1</span>
-                          <h3>The Best Homemade Masks for Face (keep the Pimples Away)</h3>
-                          <span class="author">Jane Cooper</span>
+                        <a href="/post/{{p.slug}}">
+                          <span class="number">{{p.sno}}</span>
+                          <h3>{{p.title}}</h3>
+                          <h5>{{p.content| truncate_words(10)}}</h5>
+                          <span class="author">Admin</span>
                         </a>
                       </li>
-                      <li>
-                        <a href="blog-details.html">
-                          <span class="number">2</span>
-                          <h3>17 Pictures of Medium Length Hair in Layers That Will Inspire Your New Haircut</h3>
-                          <span class="author">Wade Warren</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="blog-details.html">
-                          <span class="number">3</span>
-                          <h3>13 Amazing Poems from Shel Silverstein with Valuable Life Lessons</h3>
-                          <span class="author">Esther Howard</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="blog-details.html">
-                          <span class="number">4</span>
-                          <h3>9 Half-up/half-down Hairstyles for Long and Medium Hair</h3>
-                          <span class="author">Cameron Williamson</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="blog-details.html">
-                          <span class="number">5</span>
-                          <h3>Life Insurance And Pregnancy: A Working Mom’s Guide</h3>
-                          <span class="author">Jenny Wilson</span>
-                        </a>
-                      </li>
+                      {% endfor %}
                     </ul>
                   </div>
 
@@ -396,15 +371,15 @@
     </section><!-- /Business Category Section -->
 
     <!-- Lifestyle Category Section -->
-    <section id="lifestyle-category" class="lifestyle-category section">
+    <!--section id="lifestyle-category" class="lifestyle-category section">
 
-      <!-- Section Title -->
+      
       <div class="container section-title" data-aos="fade-up">
         <div class="section-title-container d-flex align-items-center justify-content-between">
           <h2>Lifestyle</h2>
           <p><a href="categories.html">See All Lifestyle</a></p>
         </div>
-      </div><!-- End Section Title -->
+      </div>
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
 
@@ -520,7 +495,7 @@
 
       </div>
 
-    </section><!-- /Lifestyle Category Section -->
+    </section>< /Lifestyle Category Section -->
 
   </main>
 {% endblock body %}
