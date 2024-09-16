@@ -4,7 +4,9 @@
     "local_server":"True",
     "local_uri":"mysql://root:@localhost/Shivam_Blog",
     "prod_uri":"mysql://root:@localhost/Shivam_Blog",
-    "blog_name":"Shivam_Blog"
+    "blog_name":"Shivam_Blog",
+    "admin_email":"admin@gmail.com",
+    "admin_password":"admin"
   }
 
 

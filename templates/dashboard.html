@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Full-screen cover style */
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        #wrapper {
+            display: flex;
+            height: 100vh;
+        }
+        #sidebar-wrapper {
+            min-width: 250px;
+            background-color: #343a40;
+        }
+        #page-content-wrapper {
+            flex: 1;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+        }
+        .cover-container {
+            background-image: url('https://source.unsplash.com/1920x1080/?office');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        .cover-heading {
+            font-size: 3.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .btn-cover {
+            margin-top: 20px;
+            padding: 10px 30px;
+            font-size: 1.2rem;
+        }
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.6); /* Transparent overlay */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .content-area {
+            margin-top: 30px;
+            padding: 20px;
+            flex: 1;
+        }
+        .sidebar-heading {
+            padding: 1.5rem;
+            color: white;
+            text-align: center;
+        }
+        .list-group-item {
+            background-color: #343a40;
+            color: white;
+        }
+        .list-group-item:hover {
+            background-color: #495057;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-dark" id="sidebar-wrapper">
+            <div class="sidebar-heading">Admin Dashboard</div>
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action">Dashboard</a>
+                <a href="#" class="list-group-item list-group-item-action">Posts</a>
+                <a href="#" class="list-group-item list-group-item-action">Users</a>
+                <a href="#" class="list-group-item list-group-item-action">Settings</a>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <!-- Main Content for Post CRUD -->
+            <div class="content-area container-fluid" id="posts-section">
+                <h2 class="mt-4">Posts Management</h2>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i> Post Operations
+                        <button class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#addPostModal">Add New Post</button>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Content</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic rows will be inserted here -->
+                                <tr>
+                                    <td>1</td>
+                                    <td>Sample Post Title</td>
+                                    <td>This is a sample post content.</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editPostModal">Edit</button>
+                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                    </td>
+                                </tr>
+                                <!-- More rows can be added dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Post Modal -->
+    <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="addPostModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPostModalLabel">Add New Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="postTitle" class="form-label">Post Title</label>
+                            <input type="text" class="form-control" id="postTitle" placeholder="Enter post title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="postContent" class="form-label">Post Content</label>
+                            <textarea class="form-control" id="postContent" rows="3" placeholder="Enter post content"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Post</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Post Modal -->
+    <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPostModalLabel">Edit Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="editPostTitle" class="form-label">Post Title</label>
+                            <input type="text" class="form-control" id="editPostTitle" value="Sample Post Title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPostContent" class="form-label">Post Content</label>
+                            <textarea class="form-control" id="editPostContent" rows="3">Sample Post Content</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Post</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -2090,3 +2090,20 @@ section,
   color: color-mix(in srgb, var(--default-color), transparent 30%);
   margin: 10px 0 0 0;
 }
+
+/* Admin login form css */
+.divider:after,
+.divider:before {
+content: "";
+flex: 1;
+height: 1px;
+background: #eee;
+}
+.h-custom {
+height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+.h-custom {
+height: 100%;
+}
+}

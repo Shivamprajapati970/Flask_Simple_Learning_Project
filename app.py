@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import pymysql
@@ -16,6 +16,7 @@ with open('config.json','r') as c:
 
 local_server=True
 app = Flask(__name__)
+app.secret_key='super-secret-key'
 
 if local_server:
 
@@ -103,6 +104,23 @@ def post(post_slug):
 @app.route('/starter-page')
 def starter():
     return render_template("starter-page.html",params=params)
+
+
+@app.route('/Dashbord', methods=['GET','POST'])
+def dashboard():
+    if ('user' in session and session['user']==params['admin_email']):
+        return render_template("dashboard.html",params=params)
+    
+
+    if request.method =="POST":
+        useremail=request.form.get("email")
+        userpassword=request.form.get("password")
+        if (useremail == params['admin_email'] and userpassword == params['admin_password']):
+            #session variable decleration
+            session['user']=useremail
+            return render_template("dashboard.html",params=params)
+    
+    return render_template("adminlogin.html",params=params)
 
 app.run(debug=True)
 
