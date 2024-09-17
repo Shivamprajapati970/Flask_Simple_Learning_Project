@@ -89,6 +89,7 @@
                 <a href="#" class="list-group-item list-group-item-action">Posts</a>
                 <a href="#" class="list-group-item list-group-item-action">Users</a>
                 <a href="#" class="list-group-item list-group-item-action">Settings</a>
+                <a href="/logout" class=" btn btn-success list-group-item ">Logout</a>
             </div>
         </div>
 
@@ -108,21 +109,35 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Title</th>
-                                    <th>Content</th>
+                                    <th>Slug</th>
+                                    <th>Date</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <!-- Dynamic rows will be inserted here -->
+                                 {% for post in posts %}
                                 <tr>
-                                    <td>1</td>
-                                    <td>Sample Post Title</td>
-                                    <td>This is a sample post content.</td>
+                                    <td>{{post.sno}}</td>
+                                    <td>{{post.title}}</td>
+                                    <td>{{post.slug}}</td>
+                                    <td>{{post.date}}</td>
                                     <td>
-                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editPostModal">Edit</button>
-                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                        <button class="btn btn-warning btn-sm editPostBtn"
+                                            data-id="{{ post.sno }}"
+                                            data-title="{{ post.title }}"
+                                            data-content="{{ post.content }}"
+                                            data-img="{{ post.img_post }}"
+                                            data-slug="{{ post.slug }}"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editPostModal">Edit
+                                        </button>
+                                        <form action="/deletepost/{{ post.sno }}" method="post" style="display:inline-block;">
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
                                     </td>
                                 </tr>
+                                {% endfor %}
                                 <!-- More rows can be added dynamically -->
                             </tbody>
                         </table>
@@ -141,49 +156,97 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="/Addpost" method="post">
                         <div class="mb-3">
-                            <label for="postTitle" class="form-label">Post Title</label>
-                            <input type="text" class="form-control" id="postTitle" placeholder="Enter post title">
+                            <label for="postTitle" class="form-label">Title</label>
+                            <input type="text" name="title" class="form-control" id="postTitle" placeholder="Enter post title">
                         </div>
                         <div class="mb-3">
-                            <label for="postContent" class="form-label">Post Content</label>
-                            <textarea class="form-control" id="postContent" rows="3" placeholder="Enter post content"></textarea>
+                            <label for="postTitle" class="form-label">Slug</label>
+                            <input type="text" name="slug" class="form-control" id="postTitle" placeholder="Enter post title">
                         </div>
-                        <button type="submit" class="btn btn-primary">Save Post</button>
+                        <div class="mb-3">
+                            <label for="postContent" class="form-label">Content</label>
+                            <textarea name="content" class="form-control" id="postContent" rows="3" placeholder="Enter post content"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="postTitle" class="form-label">Image File</label>
+                            <input type="text" name="img_post" class="form-control" id="postTitle" placeholder="Enter post image path">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
+    
     <!-- Edit Post Modal -->
-    <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editPostModalLabel">Edit Post</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="editPostTitle" class="form-label">Post Title</label>
-                            <input type="text" class="form-control" id="editPostTitle" value="Sample Post Title">
-                        </div>
-                        <div class="mb-3">
-                            <label for="editPostContent" class="form-label">Post Content</label>
-                            <textarea class="form-control" id="editPostContent" rows="3">Sample Post Content</textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Update Post</button>
-                    </form>
-                </div>
+<div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editPostModalLabel">Edit Post</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/updatepost">
+                    <!-- Hidden input for Post ID -->
+                    <input type="hidden" name="id" id="editPostId">
+
+                    <div class="mb-3">
+                        <label for="editPostTitle" class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control" id="editPostTitle">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPostSlug" class="form-label">Slug</label>
+                        <input type="text" name="slug" class="form-control" id="editPostSlug">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPostContent" class="form-label">Content</label>
+                        <textarea name="content" class="form-control" id="editPostContent" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPostImg" class="form-label">Image File</label>
+                        <input type="text" name="img_post" class="form-control" id="editPostImg">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Post</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Attach event listeners to all Edit buttons
+            const editButtons = document.querySelectorAll('.editPostBtn');
+    
+            editButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Get post data from the data attributes
+                    const postId = this.getAttribute('data-id');
+                    const postTitle = this.getAttribute('data-title');
+                    const postContent = this.getAttribute('data-content');
+                    const postSlug = this.getAttribute('data-slug');
+                    const postImg = this.getAttribute('data-img');
+    
+                    // Set the values of the modal input fields
+                    document.getElementById('editPostTitle').value = postTitle;
+                    document.getElementById('editPostContent').value = postContent;
+                    document.getElementById('editPostSlug').value = postSlug;
+                    document.getElementById('editPostImg').value = postImg;
+    
+                    // You can add a hidden field for the post ID if needed
+                    document.getElementById('editPostId').value = postId;
+                });
+            });
+        });
+    </script>
+    
 </body>
 </html>

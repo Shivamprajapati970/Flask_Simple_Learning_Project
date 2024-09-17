@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import pymysql
@@ -107,9 +107,11 @@ def starter():
 
 
 @app.route('/Dashbord', methods=['GET','POST'])
-def dashboard():
+def Dashboard():
     if ('user' in session and session['user']==params['admin_email']):
-        return render_template("dashboard.html",params=params)
+        posts=Posts.query.all()
+
+        return render_template("dashboard.html",params=params,posts=posts)
     
 
     if request.method =="POST":
@@ -118,10 +120,59 @@ def dashboard():
         if (useremail == params['admin_email'] and userpassword == params['admin_password']):
             #session variable decleration
             session['user']=useremail
-            return render_template("dashboard.html",params=params)
+            posts=Posts.query.all()
+            return render_template("dashboard.html",params=params,posts=posts)
     
     return render_template("adminlogin.html",params=params)
 
+#this function is Add a Post with the help of Dashboard
+@app.route('/Addpost',methods=['GET','POST'])
+def Addpost():
+    if 'user' in session and session['user']==params['admin_email']:
+        if request.method == 'POST':
+            title=request.form.get('title')
+            slug=request.form.get('slug')
+            content=request.form.get('content')
+            img_post=request.form.get('img_post')
+            date=datetime.now()
+
+            post=Posts(title=title,slug=slug,content=content,img_post=img_post,date=date)
+            db.session.add(post)
+            db.session.commit()
+            return redirect('/Dashbord')
+
+@app.route('/deletepost/<int:id>',methods=['POST'])
+def delete_post(id):
+    post = Posts.query.get_or_404(id)
+
+    db.session.delete(post)
+    db.session.commit()
+    return redirect('/Dashbord')
+
+    
+
+@app.route('/updatepost', methods=['POST'])
+def updatepost():
+    post_id = request.form.get('id')  # Get post ID from hidden input
+    print(post_id)
+    post = Posts.query.get_or_404(post_id)
+
+    post.title = request.form['title']
+    post.slug = request.form['slug']
+    post.content = request.form['content']
+    post.img_post = request.form['img_post']
+
+    db.session.commit()    
+    db.session.rollback()
+        
+    return redirect('/Dashbord')
+            
+@app.route('/logout')
+def logout():
+    session.pop('user')
+    return redirect('/Dashbord')
+
+
+
+
 app.run(debug=True)
-
-
