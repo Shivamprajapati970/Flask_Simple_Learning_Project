@@ -84,7 +84,7 @@ def contact():
         entry = Contacts(Name=name, Email=email, Phone=phone, Message=message, Date=datetime.now())
         db.session.add(entry)
         db.session.commit()
-        return redirect(url_for('contact'))
+        return redirect(url_for('/contact'))
 
 
     return render_template("contact.html",params=params)
